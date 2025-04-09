@@ -46,3 +46,17 @@
 2025-04-10 02:27:44,711 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:27:44] "GET /?edit_row=1&selected_table=tax_deductions HTTP/1.1" 200 -
 2025-04-10 02:27:44,960 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:27:44] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
 2025-04-10 02:28:50,115 - werkzeug - INFO -  * Detected change in 'D:\\Documents\\pyfiles\\dbproject\\app.py', reloading
+2025-04-10 02:28:50,683 - werkzeug - WARNING -  * Debugger is active!
+2025-04-10 02:28:50,689 - werkzeug - INFO -  * Debugger PIN: 140-886-820
+2025-04-10 02:28:53,719 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:28:53] "GET / HTTP/1.1" 200 -
+2025-04-10 02:28:53,946 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:28:53] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:28:56,576 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:28:56] "POST / HTTP/1.1" 200 -
+2025-04-10 02:28:56,910 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:28:56] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:28:58,023 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:28:58] "[32mPOST /edit/1 HTTP/1.1[0m" 302 -
+2025-04-10 02:28:58,346 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:28:58] "GET /?edit_row=1&selected_table=tax_deductions HTTP/1.1" 200 -
+2025-04-10 02:28:58,601 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:28:58] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:29:04,511 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:29:04] "[32mPOST /save/1 HTTP/1.1[0m" 302 -
+2025-04-10 02:29:04,824 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:29:04] "GET / HTTP/1.1" 200 -
+2025-04-10 02:29:05,083 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:29:05] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:29:10,251 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:29:10] "POST / HTTP/1.1" 200 -
+2025-04-10 02:29:10,585 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:29:10] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
