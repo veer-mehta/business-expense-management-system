@@ -16,7 +16,7 @@ db = MySQLdb.connect(
   host=os.getenv("DB_HOST"),
   password=os.getenv("DB_PASS"),
   read_timeout=t,
-  port=os.getenv("DB_PORT"),
+  port=int(os.getenv("DB_PORT")),
   user=os.getenv("DB_USER"),
   write_timeout=t,
 )
