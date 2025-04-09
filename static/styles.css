@@ -78,16 +78,20 @@ h1 {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
-/* Table Styling */
+/* Dynamic Table Styling */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: var(--border-radius);
+    background-color: var(--bg-light);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 2rem 0;
-    background-color: var(--bg-light);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    position: relative;
+    table-layout: auto;
+    margin: 0;
 }
 
 table::before {
@@ -101,9 +105,11 @@ table::before {
 }
 
 th, td {
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 1.25rem;
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    transition: var(--transition);
 }
 
 th {
@@ -113,6 +119,42 @@ th {
     text-transform: uppercase;
     font-size: 0.85rem;
     letter-spacing: 0.5px;
+    min-width: 120px;
+    user-select: none;
+    cursor: pointer;
+}
+
+th.sortable:hover {
+    background-color: rgba(124, 77, 255, 0.1);
+}
+
+th.sort-asc::after {
+    content: '↑';
+    margin-left: 5px;
+    color: var(--secondary);
+}
+
+th.sort-desc::after {
+    content: '↓';
+    margin-left: 5px;
+    color: var(--secondary);
+}
+
+/* Column Resize Handles */
+th::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    background: transparent;
+    cursor: col-resize;
+    z-index: 1;
+}
+
+th:hover::after {
+    background: rgba(124, 77, 255, 0.3);
 }
 
 tr:last-child td {
@@ -196,20 +238,48 @@ button.danger, .btn.danger {
 }
 
 /* Dropdown Menu */
-select.table-selector {
-    width: auto;
+.select-container {
+    position: relative;
     margin-bottom: 1.5rem;
+}
+
+.select-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.table-selector {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
     padding: 0.75rem 1.5rem;
+    padding-right: 3rem;
     background-color: var(--bg-lighter);
     color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    appearance: none;
+    font-size: 1rem;
+    transition: var(--transition);
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1rem;
-    padding-right: 3rem;
+}
+
+.table-selector::-ms-expand {
+    display: none;
+}
+
+.table-selector:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
 }
 
 /* Nav Bar */
@@ -317,6 +387,85 @@ tr.add-row {
     animation: pulse 2s infinite;
 }
 
+/* Table Cell Specific Styles */
+td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    position: relative;
+}
+
+/* Auto-incremented field styling */
+input[type="text"][disabled] {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    font-style: italic;
+    cursor: not-allowed;
+}
+
+/* Enum dropdown styling (inside table cells) */
+td select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-lighter);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e0e0e0'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+td select:hover {
+    border-color: rgba(124, 77, 255, 0.3);
+}
+
+td select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
+}
+
+/* Regular text input styling */
+td input[type="text"]:not([disabled]) {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+td input[type="text"]:not([disabled]):hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+td input[type="text"]:not([disabled]):focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
+    background-color: rgba(124, 77, 255, 0.05);
+}
+
+/* Enum dropdown options styling */
+td select option {
+    background-color: var(--bg-darker);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+}
+
 /* Animations */
 @keyframes slideIn {
     from {
@@ -341,6 +490,10 @@ tr.add-row {
     }
 }
 
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 /* Utility Classes */
 .flex {
     display: flex;
@@ -359,9 +512,9 @@ tr.add-row {
     justify-content: space-between;
 }
 
-.gap-2 {
-    gap: 2rem;
-}
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
 
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
@@ -388,9 +541,15 @@ tr.add-row {
         justify-content: space-between;
     }
     
-    table {
-        display: block;
-        overflow-x: auto;
+    th, td {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    td select,
+    td input[type="text"] {
+        padding: 0.65rem 0.75rem;
+        font-size: 0.9rem;
     }
 }
 
@@ -429,10 +588,6 @@ tr.add-row {
     animation: spin 1s ease-in-out infinite;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
 /* Tooltip */
 .tooltip {
     position: relative;
@@ -463,148 +618,25 @@ tr.add-row {
     opacity: 1;
 }
 
-
-/* Enhanced Dropdown Styles */
-.select-container {
-    position: relative;
-    margin-bottom: 1.5rem;
+/* Column Resizing JavaScript Classes */
+.resizing {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
-.select-container label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    font-size: 0.9rem;
+.resize-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background-color: var(--primary);
+    opacity: 0;
+    transition: opacity 0.2s;
 }
 
-/* Improved dropdown styling with proper vendor prefix handling */
-.table-selector {
-    /* Standard property first */
-    appearance: none;
-    /* Then vendor prefixes */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    
-    width: 100%;
-    padding: 0.75rem 1.5rem;
-    padding-right: 3rem; /* Space for custom arrow */
-    background-color: var(--bg-lighter);
-    color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: var(--transition);
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1rem;
-}
-
-/* Remove default arrow in IE */
-.table-selector::-ms-expand {
-    display: none;
-}
-
-/* Improved option styling */
-.table-selector option {
-    background-color: var(--bg-darker);
-    color: var(--text-primary);
-    padding: 0.75rem 1rem;
-}
-
-/* Focus states */
-.table-selector:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
-}
-
-/* Style for all table cells */
-td {
-    padding: 0.75rem;
-    vertical-align: middle;
-}
-
-/* Auto-incremented field styling */
-input[type="text"][disabled] {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-secondary);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
-    width: 100%;
-    font-style: italic;
-    cursor: not-allowed;
-}
-
-/* Enum dropdown styling (inside table cells) */
-td .table-selector {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background-color: var(--bg-lighter);
-    color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e0e0e0'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-td .table-selector:hover {
-    border-color: rgba(124, 77, 255, 0.3);
-}
-
-td .table-selector:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
-}
-
-/* Regular text input styling */
-td input[type="text"]:not([disabled]) {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    transition: var(--transition);
-}
-
-td input[type="text"]:not([disabled]):hover {
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-td input[type="text"]:not([disabled]):focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
-    background-color: rgba(124, 77, 255, 0.05);
-}
-
-/* Enum dropdown options styling */
-td .table-selector option {
-    background-color: var(--bg-darker);
-    color: var(--text-primary);
-    padding: 0.5rem 1rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    td .table-selector,
-    td input[type="text"] {
-        padding: 0.65rem 0.75rem;
-        font-size: 0.9rem;
-    }
+.resizing .resize-indicator {
+    opacity: 1;
 }

@@ -17,11 +17,92 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
     <script>
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, "/");
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Column resizing functionality
+            const thElements = document.querySelectorAll('th');
+            let isResizing = false;
+            let currentTh = null;
+            let startX = 0;
+            let startWidth = 0;
 
-        // Function to confirm before deleting
+            thElements.forEach(th => {
+                // Add resize indicator div
+                const resizeIndicator = document.createElement('div');
+                resizeIndicator.className = 'resize-indicator';
+                th.appendChild(resizeIndicator);
+
+                th.addEventListener('mousedown', function(e) {
+                    // Check if we're clicking on the resize handle
+                    if (e.offsetX > this.offsetWidth - 10) {
+                        isResizing = true;
+                        currentTh = this;
+                        startX = e.pageX;
+                        startWidth = this.offsetWidth;
+                        document.body.classList.add('resizing');
+                        e.preventDefault();
+                    }
+                });
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+                
+                const width = startWidth + (e.pageX - startX);
+                if (width > 50) { // Minimum width
+                    currentTh.style.width = width + 'px';
+                    currentTh.style.minWidth = width + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', function() {
+                isResizing = false;
+                currentTh = null;
+                document.body.classList.remove('resizing');
+            });
+
+            // Table sorting functionality
+            const sortableHeaders = document.querySelectorAll('th.sortable');
+            sortableHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const table = this.closest('table');
+                    const columnIndex = Array.from(this.parentElement.children).indexOf(this);
+                    const isAsc = this.classList.contains('sort-asc');
+                    
+                    // Reset all sort indicators
+                    sortableHeaders.forEach(h => {
+                        h.classList.remove('sort-asc', 'sort-desc');
+                    });
+                    
+                    // Set new sort direction
+                    this.classList.remove(isAsc ? 'sort-asc' : 'sort-desc');
+                    this.classList.add(isAsc ? 'sort-desc' : 'sort-asc');
+                    
+                    // Here you would typically:
+                    // 1. Send an AJAX request to your backend with the sort parameters
+                    // 2. Update the table with the sorted data
+                    // For now, we'll just log the action
+                    console.log(`Sorting by column ${columnIndex} in ${isAsc ? 'descending' : 'ascending'} order`);
+                });
+            });
+
+            // Form submission handling
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+                    }
+                });
+            });
+
+            // History state management
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, "/");
+            }
+        });
+
         function confirmDelete(id) {
             return confirm(`Are you sure you want to delete record ${id}?`);
         }
@@ -56,29 +137,30 @@
             {% endif %}
         {% endwith %}
 
-		<div class="card">
-			<form method="POST" action="/">
-				<div class="select-container">
-					<label for="table-select">Select Table</label>
-					<select name="table_select" id="table-select" class="table-selector" onchange="this.form.submit()">
-						{% for table in tables %}
-							<option value="{{ table }}" {% if table == selected_table %}selected{% endif %}>
-								{{ table | replace('_', ' ') | title }}
-							</option>
-						{% endfor %}
-					</select>
-				</div>
-			</form>
-		
-		<!-- Rest of your table form remains the same -->
-		</div>
+        <div class="card">
+            <h2>Database Management</h2>
+            <form method="POST" action="/">
+                <div class="select-container">
+                    <label for="table-select">Select Table</label>
+                    <select name="table_select" id="table-select" class="table-selector" onchange="this.form.submit()">
+                        {% for table in tables %}
+                            <option value="{{ table }}" {% if table == selected_table %}selected{% endif %}>
+                                {{ table | replace('_', ' ') | title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+
             <form method="POST" action="/add">
                 <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
                                 {% for column in columns %}
-                                    <th>{{ column | replace('_', ' ') | title }}</th>
+                                    <th class="{% if column != 'actions' %}sortable{% endif %}">
+                                        {{ column | replace('_', ' ') | title }}
+                                    </th>
                                 {% endfor %}
                                 <th>Actions</th>
                             </tr>
@@ -134,7 +216,7 @@
     </main>
 
     <!-- Floating Action Button -->
-    <button class="fab" title="Add New Record">
+    <button class='fab' title='Add New Record' onclick='document.querySelector("form[action=\"/add\"]").scrollIntoView({ behavior: "smooth" })'>
         <span class="material-symbols-outlined">add</span>
     </button>
 </body>
