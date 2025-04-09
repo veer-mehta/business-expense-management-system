@@ -151,18 +151,58 @@
                 </div>
             </form>
 
+			<div class="search-sort-container">
+				<form method="GET" action="/" class="search-form">
+					<input type="hidden" name="select_table" value="{{ selected_table }}">
+					<div class="search-inputs">
+						<select name="search_column">
+							<option value="">Select column to search</option>
+							{% for column in columns %}
+								<option value="{{ column }}" {% if search_column == column %}selected{% endif %}>
+									{{ column | replace('_', ' ') | title }}
+								</option>
+							{% endfor %}
+						</select>
+						<input type="text" name="search" placeholder="Search..." value="{{ search_query }}">
+						<button type="submit" class="btn search-btn">
+							<span class="material-symbols-outlined">search</span>
+						</button>
+					</div>
+					{% if search_query %}
+					<div class="search-active">
+						<span>Filtering by: {{ search_column | replace('_', ' ') | title }} containing "{{ search_query }}"</span>
+						<a href="{{ url_for('index', select_table=selected_table) }}" class="clear-search">
+							<span class="material-symbols-outlined">close</span> Clear
+						</a>
+					</div>
+					{% endif %}
+				</form>
+			</div>
                 <div class="table-responsive">
                     <table>
                         <thead>
-                            <tr>
-                                {% for column in columns %}
-                                    <th class="{% if column != 'actions' %}sortable{% endif %}">
-                                        {{ column | replace('_', ' ') | title }}
-                                    </th>
-                                {% endfor %}
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+							<tr>
+								{% for column in columns %}
+									<th class="{% if column != 'actions' %}sortable{% endif %}">
+										<a href="{{ url_for('index', 
+													  select_table=selected_table,
+													  search=search_query,
+													  search_column=search_column,
+													  sort=column,
+													  direction='desc' if sort_column==column and sort_direction=='asc' else 'asc') }}"
+										   class="sort-header {% if sort_column==column %}sort-{{ sort_direction }}{% endif %}">
+											{{ column | replace('_', ' ') | title }}
+											{% if sort_column == column %}
+												<span class="material-symbols-outlined sort-icon">
+													{% if sort_direction == 'asc' %}arrow_upward{% else %}arrow_downward{% endif %}
+												</span>
+											{% endif %}
+										</a>
+									</th>
+								{% endfor %}
+								<th>Actions</th>
+							</tr>
+						</thead>
 
                         <tbody>
                             <!-- Display existing rows -->
@@ -212,7 +252,7 @@
 									</td>
 								{% endif %}
 							</tr>
-						{% endfor %}
+							{% endfor %}
 
                             
 						<form method="POST" action="/add">
@@ -244,6 +284,34 @@
                         </tbody>
                     </table>
                 </div>
+
+
+				<div class="pagination">
+					<div class="pagination-info">
+						Showing {{ rows|length }} of {{ total_records }} records
+					</div>
+					<!-- Update pagination links to maintain search and sort parameters -->
+				<div class="pagination-controls">
+					{% if page > 1 %}
+						<a href="{{ url_for('index', page=page-1, select_table=selected_table, 
+								search=search_query, search_column=search_column,
+								sort=sort_column, direction=sort_direction) }}" class="btn">
+							<span class="material-symbols-outlined">navigate_before</span> Previous
+						</a>
+					{% endif %}
+					
+					<span class="page-indicator">Page {{ page }} of {{ total_pages }}</span>
+					
+					{% if page < total_pages %}
+						<a href="{{ url_for('index', page=page+1, select_table=selected_table,
+								search=search_query, search_column=search_column,
+								sort=sort_column, direction=sort_direction) }}" class="btn">
+							Next <span class="material-symbols-outlined">navigate_next</span>
+						</a>
+					{% endif %}
+				</div>
+
+				</div>
         </div>
     </main>
 </body>

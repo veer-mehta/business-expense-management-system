@@ -72,58 +72,90 @@ def get_auto_increment_fields(cursor, table_name):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    try:
-        db = get_db()
-        cursor = db.cursor()
+    db = get_db()
+    cursor = db.cursor()
 
-        # Get list of tables
-        cursor.execute("SHOW TABLES")
-        tables = [row[0] for row in cursor.fetchall()]
-        
-        if not tables:
-            flash("No tables found in the database", "error")
-            return render_template('index.html', tables=[], rows=[])
-        
-        # Get selected table from form OR query parameters
-        selected_table = None
-        if request.method == 'POST':
-            selected_table = request.form.get("selected_table")
-        else:
-            # Check for selected_table in query parameters first
-            selected_table = request.args.get("selected_table")
-        
-        # Default to first table if none selected
-        if not selected_table and tables:
-            selected_table = tables[0]        
-        # Get column information
-        columns = get_table_columns(cursor, selected_table)
-        enum_fields = get_enum_fields(cursor, selected_table)
-        auto_inc_fields = get_auto_increment_fields(cursor, selected_table)
-
-        # Get table data
-        cursor.execute(f"SELECT * FROM {selected_table}")
-        rows = cursor.fetchall()
-
-        # Get edit row (if any)
-        edt_row = request.args.get("edit_row", None)
-
-        return render_template(
-            'index.html',
-            tables=tables,
-            selected_table=selected_table,
-            columns=columns,
-            rows=rows,
-            enum_fields=enum_fields,
-            auto_inc_fields=auto_inc_fields,
-            edt_row=int(edt_row) if edt_row else None
-        )
-    except Exception as e:
-        logger.error(f"Error in index route: {e}")
-        flash(f"An error occurred: {e}", "error")
-        return render_template('index.html', tables=[], rows=[])
-    finally:
-        if 'db' in locals():
-            db.close()
+    cursor.execute("SHOW TABLES")
+    tables = [row[0] for row in cursor.fetchall()]
+    
+    # Get selected table
+    if request.method == 'POST':
+        selected_table = request.form.get("select_table") or request.form.get("selected_table")
+    else:
+        selected_table = request.args.get("select_table") or request.args.get("selected_table")
+    
+    if not selected_table:
+        selected_table = tables[0]
+    
+    # Get table columns
+    columns = get_table_columns(cursor, selected_table)
+    enum_fields = get_enum_fields(cursor, selected_table)
+    auto_inc_fields = get_auto_increment_fields(cursor, selected_table)
+    
+    # Search functionality
+    search_query = request.args.get('search', '')
+    search_column = request.args.get('search_column', '')
+    
+    # Sorting parameters
+    sort_column = request.args.get('sort', columns[0] if columns else '')
+    sort_direction = request.args.get('direction', 'asc')
+    
+    # Pagination parameters
+    page = request.args.get('page', 1, type=int)
+    per_page = 50
+    offset = (page - 1) * per_page
+    
+    # Build the query
+    query = f"SELECT * FROM {selected_table}"
+    count_query = f"SELECT COUNT(*) FROM {selected_table}"
+    params = []
+    
+    # Add search condition if provided
+    if search_query and search_column and search_column in columns:
+        query += f" WHERE {search_column} LIKE %s"
+        count_query += f" WHERE {search_column} LIKE %s"
+        params.append(f"%{search_query}%")
+    
+    # Add sorting if provided
+    if sort_column and sort_column in columns:
+        query += f" ORDER BY {sort_column} {'ASC' if sort_direction.lower() == 'asc' else 'DESC'}"
+    
+    # Get total count for pagination
+    cursor.execute(count_query, params)
+    total_records = cursor.fetchone()[0]
+    total_pages = (total_records + per_page - 1) // per_page
+    
+    # Add pagination
+    query += f" LIMIT %s OFFSET %s"
+    params.extend([per_page, offset])
+    
+    # Execute the final query
+    cursor.execute(query, params)
+    rows = cursor.fetchall()
+    
+    edt_row = request.args.get("edit_row", None)
+    
+    return render_template(
+        'index.html',
+        tables=tables,
+        selected_table=selected_table,
+        columns=columns,
+        rows=rows,
+        enum_fields=enum_fields,
+        auto_inc_fields=auto_inc_fields,
+        edt_row=int(edt_row) if edt_row else None,
+        # Pagination data
+        page=page,
+        total_pages=total_pages,
+        per_page=per_page,
+        total_records=total_records,
+        # Search data
+        search_query=search_query,
+        search_column=search_column,
+        # Sort data
+        sort_column=sort_column,
+        sort_direction=sort_direction
+    )
 
 @app.route('/add', methods=['POST'])
 def add_record():
