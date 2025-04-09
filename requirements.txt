@@ -1,4 +1,4 @@
 flask
-mysql-connector-python
+mysqlclient
 python-dotenv
 cryptography
