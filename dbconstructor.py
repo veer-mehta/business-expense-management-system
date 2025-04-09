@@ -1,20 +1,20 @@
 import MySQLdb
-import load_dotenv from dotenv
+from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-timeout = 10
+t = 10
 connection = MySQLdb.connect(
   charset="utf8mb4",
-  connect_timeout=timeout,
+  connect_timeout=t,
   db=os.getenv("DB_NAME"),
   host=os.getenv("DB_HOST"),
   password=os.getenv("DB_PASS"),
-  read_timeout=timeout,
+  read_timeout=t,
   port=14898,
   user=os.getenv("DB_USER"),
-  write_timeout=timeout,
+  write_timeout=t,
 )
 
 cursor = connection.cursor()  
