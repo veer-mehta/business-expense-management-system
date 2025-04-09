@@ -1,11 +1,11 @@
 import MySQLdb
-from dotenv import load_dotenv
+import load_dotenv from dotenv
 import os
 
 load_dotenv()
 
 timeout = 10
-db = MySQLdb.connect(
+connection = MySQLdb.connect(
   charset="utf8mb4",
   connect_timeout=timeout,
   db=os.getenv("DB_NAME"),
@@ -17,7 +17,7 @@ db = MySQLdb.connect(
   write_timeout=timeout,
 )
 
-cursor = db.cursor()  
+cursor = connection.cursor()  
 
 def create_db():
 	cursor.execute("""
