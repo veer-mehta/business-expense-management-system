@@ -111,3 +111,17 @@
 2025-04-10 02:51:27,354 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:51:27] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
 2025-04-10 02:51:34,567 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:51:34] "GET /?select_table=audit_log&search_column=action_description&search=approved HTTP/1.1" 200 -
 2025-04-10 02:51:34,914 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:51:34] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:52:47,557 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:52:47] "GET /?select_table=audit_log HTTP/1.1" 200 -
+2025-04-10 02:52:47,815 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:52:47] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:55:44,989 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:44] "GET / HTTP/1.1" 200 -
+2025-04-10 02:55:45,235 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:45] "GET /static/styles.css HTTP/1.1" 200 -
+2025-04-10 02:55:47,917 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:47] "GET /?select_table=audit_log&search=&search_column=&sort=log_id&direction=desc HTTP/1.1" 200 -
+2025-04-10 02:55:48,262 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:48] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:55:49,799 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:49] "GET /?select_table=audit_log&search=&search_column=&sort=user_id&direction=asc HTTP/1.1" 200 -
+2025-04-10 02:55:50,135 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:50] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:55:53,952 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:53] "GET /?select_table=audit_log&search=&search_column=&sort=action_description&direction=asc HTTP/1.1" 200 -
+2025-04-10 02:55:54,292 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:55:54] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:56:03,541 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:56:03] "GET / HTTP/1.1" 200 -
+2025-04-10 02:56:03,872 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:56:03] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 02:56:05,748 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:56:05] "GET / HTTP/1.1" 200 -
+2025-04-10 02:56:06,072 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:56:06] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
