@@ -466,6 +466,12 @@ td select option {
     padding: 0.5rem 1rem;
 }
 
+select option {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+}
+
 /* Animations */
 @keyframes slideIn {
     from {

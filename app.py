@@ -63,7 +63,10 @@ def dsp():
 			values = [v.strip("'") for v in values.split(",")]
 			enum_fields[field_display] = values
 
-		if "auto_increment" in extra.lower():
+		if col_type.startswith("timestamp"):
+			auto_inc_fields.add(field_display)
+
+		if "auto_increment" in extra.lower() or "timestamp" in extra.lower():
 			auto_inc_fields.add(field_display)
 
 	# Fetch all rows from selected table
@@ -72,8 +75,6 @@ def dsp():
 
 	# Get primary key
 	pk = get_primary_key(selected_table).replace('_', ' ').title()
-
-	open("log.txt", 'w').write(str(pk))
 
 	return render_template(
 		"index.html",
@@ -122,11 +123,13 @@ def add():
 	columns = [col[0] for col in csr.fetchall()]
 	pk = get_primary_key(selected_table)
 
+
 	insert_cols = [col for col in columns if col != pk]
-	values = [request.form.get(col) for col in insert_cols]
+	values = [request.form.get(col.replace('_', ' ').title()) for col in insert_cols]
 	placeholders = ", ".join(["%s"] * len(values))
 
 	query = f"INSERT INTO `{selected_table}` ({', '.join(insert_cols)}) VALUES ({placeholders})"
+	#open("log.txt", 'a').write("Q:"+str(query)+"\nIC: "+str(insert_cols)+"\nC: "+str(columns)+"\nV: "+str(values)+"\n")
 	csr.execute(query, values)
 	db.commit()
 	return redirect(url_for("dsp"))

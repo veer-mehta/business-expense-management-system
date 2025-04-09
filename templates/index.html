@@ -141,7 +141,7 @@
             <form method="POST" action="/">
                 <div class="select-container">
                     <label for="table-select">Select Table</label>
-                    <select name="table_select" id="table-select" class="table-selector" onchange="this.form.submit()">
+                    <select name="table_select" id="table-select" onchange="this.form.submit()">
                         {% for table in tables %}
                             <option value="{{ table }}" {% if table == selected_table %}selected{% endif %}>
                                 {{ table | replace('_', ' ') | title }}
@@ -168,20 +168,51 @@
                         <tbody>
                             <!-- Display existing rows -->
                             {% for row in rows %}
-                                <tr>
-                                    {% for col in columns %}
-                                        <td>{{ row[loop.index0] }}</td>
-                                    {% endfor %}
-                                    <td class="flex gap-1">
-                                        <button type="button" class="btn secondary" title="Edit">
-                                            <span class="material-symbols-outlined">edit</span>
-                                        </button>
-                                        <button type="button" class="btn danger" title="Delete" onclick="return confirmDelete('{{ row[0] }}')">
-                                            <span class="material-symbols-outlined">delete</span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            {% endfor %}
+							<tr>
+								{% if row[0] == edt_row %}
+									<form method="POST" action="/save/{{ row[0] }}">
+										{% for col in columns %}
+											<td>
+												{% set col_name = col | lower | replace(' ', '_') %}
+												{% if col in auto_inc_fields %}
+													<input type="text" name="{{ col_name }}" value="{{ row[loop.index0] }}" disabled>
+												{% elif col in enum_fields %}
+													<select name="{{ col_name }}">
+														{% for val in enum_fields[col] %}
+															<option value="{{ val }}" {% if val == row[loop.index0] %}selected{% endif %}>{{ val }}</option>
+														{% endfor %}
+													</select>
+												{% else %}
+													<input type="text" name="{{ col_name }}" value="{{ row[loop.index0] }}" required>
+												{% endif %}
+											</td>
+										{% endfor %}
+										<td>
+											<button type="submit" class="btn primary">
+												<span class="material-symbols-outlined">save</span> Save
+											</button>
+										</td>
+									</form>
+								{% else %}
+									{% for col in columns %}
+										<td>{{ row[loop.index0] }}</td>
+									{% endfor %}
+									<td class="flex gap-1">
+										<form method="POST" action="/edit/{{ row[0] }}" style="display:inline">
+											<button type="submit" class="btn secondary" title="Edit">
+												<span class="material-symbols-outlined">edit</span>
+											</button>
+										</form>
+										<form method="POST" action="/delete/{{ row[0] }}" onsubmit="return confirmDelete('{{ row[0] }}')" style="display:inline">
+											<button type="submit" class="btn danger" title="Delete">
+												<span class="material-symbols-outlined">delete</span>
+											</button>
+										</form>
+									</td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+
                             
                             <!-- Add new record row -->
                             <tr class="add-row">
