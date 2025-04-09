@@ -141,7 +141,7 @@
             <form method="POST" action="/">
                 <div class="select-container">
                     <label for="table-select">Select Table</label>
-                    <select name="table_select" id="table-select" onchange="this.form.submit()">
+                    <select name="selected_table" id="selected_table" onchange="this.form.submit()">
                         {% for table in tables %}
                             <option value="{{ table }}" {% if table == selected_table %}selected{% endif %}>
                                 {{ table | replace('_', ' ') | title }}
@@ -151,7 +151,6 @@
                 </div>
             </form>
 
-            <form method="POST" action="/add">
                 <div class="table-responsive">
                     <table>
                         <thead>
@@ -171,19 +170,19 @@
 							<tr>
 								{% if row[0] == edt_row %}
 									<form method="POST" action="/save/{{ row[0] }}">
+										<input type="hidden" name="selected_table" value="{{ selected_table }}">
 										{% for col in columns %}
 											<td>
-												{% set col_name = col | lower | replace(' ', '_') %}
 												{% if col in auto_inc_fields %}
-													<input type="text" name="{{ col_name }}" value="{{ row[loop.index0] }}" disabled>
+													<input type="text" name="{{ col }}" value="{{ row[loop.index0] }}" disabled>
 												{% elif col in enum_fields %}
-													<select name="{{ col_name }}">
+													<select name="{{ col }}">
 														{% for val in enum_fields[col] %}
 															<option value="{{ val }}" {% if val == row[loop.index0] %}selected{% endif %}>{{ val }}</option>
 														{% endfor %}
 													</select>
 												{% else %}
-													<input type="text" name="{{ col_name }}" value="{{ row[loop.index0] }}" required>
+													<input type="text" name="{{ col }}" value="{{ row[loop.index0] }}" required>
 												{% endif %}
 											</td>
 										{% endfor %}
@@ -199,9 +198,11 @@
 									{% endfor %}
 									<td class="flex gap-1">
 										<form method="POST" action="/edit/{{ row[0] }}" style="display:inline">
+											<input type="hidden" name="selected_table" value="{{ selected_table }}">
 											<button type="submit" class="btn secondary" title="Edit">
 												<span class="material-symbols-outlined">edit</span>
 											</button>
+										</form>
 										</form>
 										<form method="POST" action="/delete/{{ row[0] }}" onsubmit="return confirmDelete('{{ row[0] }}')" style="display:inline">
 											<button type="submit" class="btn danger" title="Delete">
@@ -214,6 +215,7 @@
 						{% endfor %}
 
                             
+						<form method="POST" action="/add">
                             <!-- Add new record row -->
                             <tr class="add-row">
                                 {% for column in columns %}
@@ -238,16 +240,11 @@
                                     </button>
                                 </td>
                             </tr>
+						</form>
                         </tbody>
                     </table>
                 </div>
-            </form>
         </div>
     </main>
-
-    <!-- Floating Action Button -->
-    <button class='fab' title='Add New Record' onclick='document.querySelector("form[action=\"/add\"]").scrollIntoView({ behavior: "smooth" })'>
-        <span class="material-symbols-outlined">add</span>
-    </button>
 </body>
 </html>
