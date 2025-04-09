@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import MySQLdb
-import load_dotenv from dotenv
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
