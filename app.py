@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import MySQLdb
-import load_dotenv from dotenv
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ app.config["SECRET_KEY"] = "SECRET_KEY"
 load_dotenv()
 
 timeout = 10
-connection = MySQLdb.connect(
+db = MySQLdb.connect(
   charset="utf8mb4",
   connect_timeout=timeout,
   db=os.getenv("DB_NAME"),
