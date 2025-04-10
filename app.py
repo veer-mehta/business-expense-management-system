@@ -3,18 +3,12 @@ import MySQLdb
 from MySQLdb import cursors
 from dotenv import load_dotenv
 import os
-import logging
-
-# Set up logging
-logging.basicConfig(level=logging.INFO, 
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filename='app.log')
-logger = logging.getLogger('bems')
-
-app = Flask(__name__)
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "default_secret_key")
 
 load_dotenv()
+
+app = Flask(__name__)
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
 
 # Database connection function with error handling
 def get_db():
@@ -33,8 +27,7 @@ def get_db():
         )
         return connection
     except MySQLdb.Error as e:
-        logger.error(f"Database connection error: {e}")
-        raise
+        pass
 
 # Helper functions
 def get_table_columns(cursor, table_name):
@@ -193,7 +186,6 @@ def add_record():
     except Exception as e:
         if db:
             db.rollback()
-        logger.error(f"Error adding record: {e}")
         flash(f"Failed to add record: {e}", "error")
     finally:
         if db:
@@ -241,7 +233,6 @@ def save_record(row_id):
     except Exception as e:
         if db:
             db.rollback()
-        logger.error(f"Error updating record: {e}")
         flash(f"Failed to update record: {e}", "error")
     finally:
         if db:
@@ -275,7 +266,6 @@ def delete_record(row_id):
     except Exception as e:
         if db:
             db.rollback()
-        logger.error(f"Error deleting record: {e}")
         flash(f"Failed to delete record: {e}", "error")
     finally:
         if db:

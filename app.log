@@ -125,3 +125,51 @@
 2025-04-10 02:56:03,872 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:56:03] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
 2025-04-10 02:56:05,748 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:56:05] "GET / HTTP/1.1" 200 -
 2025-04-10 02:56:06,072 - werkzeug - INFO - 127.0.0.1 - - [10/Apr/2025 02:56:06] "[36mGET /static/styles.css HTTP/1.1[0m" 304 -
+2025-04-10 10:57:58,649 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 10:57:58,650 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 10:57:58,653 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 10:57:59,431 - werkzeug - WARNING -  * Debugger is active!
+2025-04-10 10:57:59,442 - werkzeug - INFO -  * Debugger PIN: 511-836-287
+2025-04-10 10:58:40,848 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 10:58:40,849 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 10:58:40,852 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 10:58:41,612 - werkzeug - WARNING -  * Debugger is active!
+2025-04-10 10:58:41,620 - werkzeug - INFO -  * Debugger PIN: 511-836-287
+2025-04-10 11:00:42,073 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 11:00:42,073 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 11:01:27,515 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 11:01:27,515 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 11:01:53,242 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 11:01:53,242 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 11:01:53,245 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:01:53,675 - werkzeug - WARNING -  * Debugger is active!
+2025-04-10 11:01:53,680 - werkzeug - INFO -  * Debugger PIN: 511-836-287
+2025-04-10 11:02:05,353 - werkzeug - INFO -  * Detected change in 'D:\\Documents\\pyfiles\\dbproject\\app.py', reloading
+2025-04-10 11:02:05,450 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:02:08,206 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 11:02:08,206 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 11:02:08,210 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:02:08,918 - werkzeug - WARNING -  * Debugger is active!
+2025-04-10 11:02:08,927 - werkzeug - INFO -  * Debugger PIN: 511-836-287
+2025-04-10 11:02:29,982 - werkzeug - INFO -  * Detected change in 'D:\\Documents\\pyfiles\\dbproject\\app.py', reloading
+2025-04-10 11:02:30,096 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:02:50,220 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:02:56,016 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:03:05,570 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:03:06,464 - werkzeug - WARNING -  * Debugger is active!
+2025-04-10 11:03:06,476 - werkzeug - INFO -  * Debugger PIN: 511-836-287
+2025-04-10 11:03:46,732 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-10 11:03:46,732 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-10 11:03:46,735 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:03:47,447 - werkzeug - WARNING -  * Debugger is active!
+2025-04-10 11:03:47,455 - werkzeug - INFO -  * Debugger PIN: 511-836-287
+2025-04-10 11:04:24,076 - werkzeug - INFO -  * Detected change in 'D:\\Documents\\pyfiles\\dbproject\\app.py', reloading
+2025-04-10 11:04:24,182 - werkzeug - INFO -  * Restarting with stat
+2025-04-10 11:04:28,087 - werkzeug - INFO -  * Restarting with stat
