@@ -77,10 +77,6 @@
                     this.classList.remove(isAsc ? 'sort-asc' : 'sort-desc');
                     this.classList.add(isAsc ? 'sort-desc' : 'sort-asc');
                     
-                    // Here you would typically:
-                    // 1. Send an AJAX request to your backend with the sort parameters
-                    // 2. Update the table with the sorted data
-                    // For now, we'll just log the action
                     console.log(`Sorting by column ${columnIndex} in ${isAsc ? 'descending' : 'ascending'} order`);
                 });
             });

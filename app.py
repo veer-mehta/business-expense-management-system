@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import MySQLdb
-from MySQLdb import cursors
 from dotenv import load_dotenv
 import os
 
@@ -10,7 +9,6 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 
-# Database connection function with error handling
 def get_db():
     try:
         connection_timeout = 10
@@ -93,7 +91,6 @@ def index():
     sort_column = request.args.get('sort', columns[0] if columns else '')
     sort_direction = request.args.get('direction', 'asc')
     
-    
     # Build the query
     query = f"SELECT * FROM {selected_table}"
     count_query = f"SELECT COUNT(*) FROM {selected_table}"
@@ -149,7 +146,6 @@ def add_record():
         sort_column = form_data.get('sort', '')
         sort_direction = form_data.get('direction', 'asc')
         
-        # Remove non-table data from form
         form_data.pop('selected_table', None)
         form_data.pop('search', None)
         form_data.pop('search_column', None)
@@ -197,7 +193,6 @@ def edit_record(row_id):
         flash("No table selected", "error")
         return redirect(url_for('index'))
     
-    # Preserve search and sort parameters
     search_query = request.form.get('search', '')
     search_column = request.form.get('search_column', '')
     sort_column = request.form.get('sort', '')
