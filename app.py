@@ -93,10 +93,6 @@ def index():
     sort_column = request.args.get('sort', columns[0] if columns else '')
     sort_direction = request.args.get('direction', 'asc')
     
-    # Pagination parameters
-    page = request.args.get('page', 1, type=int)
-    per_page = 50
-    offset = (page - 1) * per_page
     
     # Build the query
     query = f"SELECT * FROM {selected_table}"
@@ -113,15 +109,6 @@ def index():
     if sort_column and sort_column in columns:
         query += f" ORDER BY {sort_column} {'ASC' if sort_direction.lower() == 'asc' else 'DESC'}"
     
-    # Get total count for pagination
-    cursor.execute(count_query, params)
-    total_records = cursor.fetchone()[0]
-    total_pages = (total_records + per_page - 1) // per_page
-    
-    # Add pagination
-    query += f" LIMIT %s OFFSET %s"
-    params.extend([per_page, offset])
-    
     # Execute the final query
     cursor.execute(query, params)
     rows = cursor.fetchall()
@@ -137,11 +124,6 @@ def index():
         enum_fields=enum_fields,
         auto_inc_fields=auto_inc_fields,
         edt_row=int(edt_row) if edt_row else None,
-        # Pagination data
-        page=page,
-        total_pages=total_pages,
-        per_page=per_page,
-        total_records=total_records,
         # Search data
         search_query=search_query,
         search_column=search_column,
@@ -161,12 +143,22 @@ def add_record():
         form_data = request.form.to_dict()
         selected_table = form_data.get('selected_table')
         
+        # Capture search and sort params before removing
+        search_query = form_data.get('search', '')
+        search_column = form_data.get('search_column', '')
+        sort_column = form_data.get('sort', '')
+        sort_direction = form_data.get('direction', 'asc')
+        
+        # Remove non-table data from form
+        form_data.pop('selected_table', None)
+        form_data.pop('search', None)
+        form_data.pop('search_column', None)
+        form_data.pop('sort', None)
+        form_data.pop('direction', None)
+        
         if not selected_table:
             flash("No table selected", "error")
             return redirect(url_for('index'))
-        
-        # Remove selected_table from form data
-        form_data.pop('selected_table', None)
         
         # Get columns and values
         columns = list(form_data.keys())
@@ -191,14 +183,33 @@ def add_record():
         if db:
             db.close()
     
-    return redirect(url_for('index'))
+    return redirect(url_for('index', 
+                           select_table=selected_table,
+                           search=search_query,
+                           search_column=search_column,
+                           sort=sort_column,
+                           direction=sort_direction))
 
 @app.route('/edit/<int:row_id>', methods=['POST'])
 def edit_record(row_id):
-    selected_table = request.form.get('selected_table')
+    selected_table = request.form.get('selected_table') or request.form.get('select_table')
     if not selected_table:
         flash("No table selected", "error")
-    return redirect(url_for('index', edit_row=row_id, selected_table=selected_table))
+        return redirect(url_for('index'))
+    
+    # Preserve search and sort parameters
+    search_query = request.form.get('search', '')
+    search_column = request.form.get('search_column', '')
+    sort_column = request.form.get('sort', '')
+    sort_direction = request.form.get('direction', 'asc')
+    
+    return redirect(url_for('index', 
+                           edit_row=row_id, 
+                           select_table=selected_table,
+                           search=search_query,
+                           search_column=search_column,
+                           sort=sort_column,
+                           direction=sort_direction))
 
 @app.route('/save/<int:row_id>', methods=['POST'])
 def save_record(row_id):
@@ -211,12 +222,22 @@ def save_record(row_id):
         form_data = request.form.to_dict()
         selected_table = form_data.get('selected_table')
         
+        # Capture search and sort params before removing
+        search_query = form_data.get('search', '')
+        search_column = form_data.get('search_column', '')
+        sort_column = form_data.get('sort', '')
+        sort_direction = form_data.get('direction', 'asc')
+        
+        # Remove non-table data from form
+        form_data.pop('selected_table', None)
+        form_data.pop('search', None)
+        form_data.pop('search_column', None)
+        form_data.pop('sort', None)
+        form_data.pop('direction', None)
+        
         if not selected_table:
             flash("No table selected", "error")
             return redirect(url_for('index'))
-        
-        # Remove selected_table from form data
-        form_data.pop('selected_table', None)
         
         # Get primary key column
         cursor.execute(f"SHOW COLUMNS FROM {selected_table}")
@@ -238,7 +259,12 @@ def save_record(row_id):
         if db:
             db.close()
     
-    return redirect(url_for('index'))
+    return redirect(url_for('index', 
+                           select_table=selected_table,
+                           search=search_query,
+                           search_column=search_column,
+                           sort=sort_column,
+                           direction=sort_direction))
 
 @app.route('/delete/<int:row_id>', methods=['POST'])
 def delete_record(row_id):
@@ -249,6 +275,12 @@ def delete_record(row_id):
         
         # Get selected table from form data
         selected_table = request.form.get('selected_table')
+        
+        # Preserve search and sort parameters
+        search_query = request.form.get('search', '')
+        search_column = request.form.get('search_column', '')
+        sort_column = request.form.get('sort', '')
+        sort_direction = request.form.get('direction', 'asc')
         
         if not selected_table:
             flash("No table selected", "error")
@@ -271,7 +303,11 @@ def delete_record(row_id):
         if db:
             db.close()
     
-    return redirect(url_for('index'))
-
+    return redirect(url_for('index', 
+                           select_table=selected_table,
+                           search=search_query,
+                           search_column=search_column,
+                           sort=sort_column,
+                           direction=sort_direction))
 if __name__ == '__main__':
     app.run(debug=True)

@@ -114,7 +114,7 @@
         <nav>
             <div class="nav-logo">
                 <span class="material-symbols-outlined">database</span>
-                <span>Biz<span>Exp</span></span>
+                <span>FinoraTech Solutions Pvt. Ltd.</span>
             </div>
             <div class="nav-links">
                 <a href="/" class="active">Dashboard</a>
@@ -211,6 +211,10 @@
 								{% if row[0] == edt_row %}
 									<form method="POST" action="/save/{{ row[0] }}">
 										<input type="hidden" name="selected_table" value="{{ selected_table }}">
+										<input type="hidden" name="search" value="{{ search_query }}">
+										<input type="hidden" name="search_column" value="{{ search_column }}">
+										<input type="hidden" name="sort" value="{{ sort_column }}">
+										<input type="hidden" name="direction" value="{{ sort_direction }}">
 										{% for col in columns %}
 											<td>
 												{% if col in auto_inc_fields %}
@@ -239,12 +243,20 @@
 									<td class="flex gap-1">
 										<form method="POST" action="/edit/{{ row[0] }}" style="display:inline">
 											<input type="hidden" name="selected_table" value="{{ selected_table }}">
+											<input type="hidden" name="search" value="{{ search_query }}">
+											<input type="hidden" name="search_column" value="{{ search_column }}">
+											<input type="hidden" name="sort" value="{{ sort_column }}">
+											<input type="hidden" name="direction" value="{{ sort_direction }}">
 											<button type="submit" class="btn secondary" title="Edit">
 												<span class="material-symbols-outlined">edit</span>
 											</button>
 										</form>
-										</form>
 										<form method="POST" action="/delete/{{ row[0] }}" onsubmit="return confirmDelete('{{ row[0] }}')" style="display:inline">
+											<input type="hidden" name="selected_table" value="{{ selected_table }}">
+											<input type="hidden" name="search" value="{{ search_query }}">
+											<input type="hidden" name="search_column" value="{{ search_column }}">
+											<input type="hidden" name="sort" value="{{ sort_column }}">
+											<input type="hidden" name="direction" value="{{ sort_direction }}">
 											<button type="submit" class="btn danger" title="Delete">
 												<span class="material-symbols-outlined">delete</span>
 											</button>
@@ -257,6 +269,11 @@
                             
 						<form method="POST" action="/add">
                             <!-- Add new record row -->
+							<input type="hidden" name="selected_table" value="{{ selected_table }}">
+							<input type="hidden" name="search" value="{{ search_query }}">
+							<input type="hidden" name="search_column" value="{{ search_column }}">
+							<input type="hidden" name="sort" value="{{ sort_column }}">
+							<input type="hidden" name="direction" value="{{ sort_direction }}">
                             <tr class="add-row">
                                 {% for column in columns %}
                                     <td>
@@ -285,33 +302,7 @@
                     </table>
                 </div>
 
-
-				<div class="pagination">
-					<div class="pagination-info">
-						Showing {{ rows|length }} of {{ total_records }} records
-					</div>
-					<!-- Update pagination links to maintain search and sort parameters -->
-				<div class="pagination-controls">
-					{% if page > 1 %}
-						<a href="{{ url_for('index', page=page-1, select_table=selected_table, 
-								search=search_query, search_column=search_column,
-								sort=sort_column, direction=sort_direction) }}" class="btn">
-							<span class="material-symbols-outlined">navigate_before</span> Previous
-						</a>
-					{% endif %}
-					
-					<span class="page-indicator">Page {{ page }} of {{ total_pages }}</span>
-					
-					{% if page < total_pages %}
-						<a href="{{ url_for('index', page=page+1, select_table=selected_table,
-								search=search_query, search_column=search_column,
-								sort=sort_column, direction=sort_direction) }}" class="btn">
-							Next <span class="material-symbols-outlined">navigate_next</span>
-						</a>
-					{% endif %}
-				</div>
-
-				</div>
+			</div>
         </div>
     </main>
 </body>
